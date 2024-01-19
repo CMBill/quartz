@@ -32,10 +32,11 @@ export default (() => {
         <link rel="preconnect" href="https://fonts.gstatic.com" />
         {css.map((href) => (
           <link key={href} href={href} rel="stylesheet" type="text/css" spa-preserve />
-        ))}
+          ))}
         {js
           .filter((resource) => resource.loadTime === "beforeDOMReady")
           .map((res) => JSResourceToScriptElement(res, true))}
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-web@latest/style.css" />
       </head>
     )
   }

@@ -1,0 +1,9 @@
+{
+  "accentColor": "",
+  "interfaceFontFamily": "HarmonyOS Sans SC,霞鹜文楷 屏幕阅读版",
+  "textFontFamily": "霞鹜文楷 屏幕阅读版,HarmonyOS Sans SC",
+  "monospaceFontFamily": "霞鹜文楷等宽 屏幕阅读版,CaskaydiaCove Nerd Font Mono",
+  "cssTheme": "Things",
+  "theme": "moonstone",
+  "baseFontSize": 18
+}

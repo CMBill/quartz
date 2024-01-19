@@ -1,0 +1,12 @@
+{
+  "trashOption": "local",
+  "newFileLocation": "folder",
+  "newFileFolderPath": "_Inbox",
+  "strictLineBreaks": true,
+  "propertiesInDocument": "source",
+  "showLineNumber": true,
+  "livePreview": false,
+  "promptDelete": false,
+  "useTab": false,
+  "attachmentFolderPath": "_Assets"
+}
