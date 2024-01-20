@@ -145,4 +145,69 @@ img.title = 'title of the image'
 - `replace(oldToken, newToken)`：将 `oldToken` 替换为 `newToken`，如果前者不存在，则返回 `false`
 - `toggle()`：切换，如果标记存在则删除，如果不存在则添加
 
+#### 操作表单元素
+常用的操作：
+```javascript
+const inputForm = document.querySelector('input')
+uname = inputForm.value // 值
+inputForm.type = 'password'
+```
+
+> [!Tips]
+> 对于添加即有效果（如 `checked`、`disabled`）的属性，只能传入布尔值来确定是否生效
+
+#### 自定义属性
+自定义属性在标签上一律以 `data-` 开头，在 DOM 对象中存储在 `dataset` 对象里，属性名即为标签上 `data-` 后面的部分。
+```javascript
+Element.dataset.自定义对象名
+```
+
+## 定时器函数
+### 间歇函数
+```javascript
+setInterval(函数名, 间隔时间 ms)
+clearInterval(定时器 id)
+```
+
+`setInterval` 参数：
+- **函数名**：只写函数名，不加小括号
+- **间隔时间**：单位是 ms，第一次是先过间隔时间再执行
+
+返回值是此定时器的 id 号（数字型），用于 `clearInterval` 中关闭定时器。`clearInterval` 可以放在 `setInterval` 执行的函数内，用于控制特定时间后关闭定时器。
+
+```html
+<body>
+    <button class="btn" disabled>先看看 5</button>
+    <script>
+        const btn = document.querySelector('.btn')
+        let i = 5
+        let id = setInterval(function () {
+            i--
+            btn.innerHTML = `先看看 ${i}`
+            if (i === 0) {
+                clearInterval(id)
+                btn.disabled = false
+            }
+        }, 1000)
+        </script>
+</body>
+```
+
+## 事件
+### 事件监听
+```javascript
+元素对象.addEventListener('事件类型', 函数名)
+```
+
+> [!Tips]
+> - 参数中函数可以传入匿名函数，也可以传入函数名（**不加括号**）
+> - 无法获取此函数的返回值，如果需要获取某个值，可以在函数内部修改全局变量来实现，或者使用使用回调函数。
+> - 相比于使用 on 来添加事件（如下），这一方法可以为同一个元素添加多个事件，而使用 on 来添加，后添加的事件会将前面的时间覆盖。
+>     ```javascript
+>     元素对象.on事件 = function () {}
+>     ```
+
+### 事件类型
+参见：[事件参考|MDN](https://developer.mozilla.org/zh-CN/docs/Web/Events)
+
 

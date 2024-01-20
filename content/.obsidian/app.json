@@ -5,7 +5,7 @@
   "strictLineBreaks": true,
   "propertiesInDocument": "source",
   "showLineNumber": true,
-  "livePreview": false,
+  "livePreview": true,
   "promptDelete": false,
   "useTab": false,
   "attachmentFolderPath": "_Assets"
