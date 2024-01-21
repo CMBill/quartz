@@ -209,5 +209,112 @@ clearInterval(定时器 id)
 
 ### 事件类型
 参见：[事件参考|MDN](https://developer.mozilla.org/zh-CN/docs/Web/Events)
+#### 鼠标事件
+- `click`：点击
+- `mouseenter`：经过（无[[#事件冒泡|冒泡]]效果，推荐）
+- `mouseleave`：离开（无冒泡效果，推荐）
+- `mouseover`：经过（有冒泡效果）
+- `mouseout`：离开（有冒泡效果）
 
+#### 表单焦点事件
+- `focus`：（输入框光标）获得焦点
+- `blur`：（输入框光标）失去焦点
+
+#### 键盘与输入事件
+- `keydown`：按下
+- `keyup`：抬起
+- `input`：文本框内有输入
+
+### 相关对象与参数
+#### 事件对象
+存有事件触发时相关信息的对象，在事件触发的函数里的第一个参数即是事件对象，一般用 `event`、`e` 等命名。详见 [Event | MDN](https://developer.mozilla.org/zh-CN/docs/Web/API/Event#%E5%9F%BA%E4%BA%8E_event_%E7%9A%84%E6%8E%A5%E5%8F%A3)。
+```javascript
+<body>
+    <button class="btn">先看看</button>
+    <script>
+        const btn = document.querySelector('button')
+        btn.addEventListener('click', function (e) {
+            console.log(e)
+        })
+        // 或者
+        function fn (e) {
+            console.log(e)
+        }
+        btn.addEventListener('click', fn)
+        </script>
+</body>
+```
+
+#### 环境对象
+即函数内部的特殊变量 `this`，指当前函数运行时所处的环境。
+
+```html
+<body>
+    <button class="btn">先看看</button>
+    <script>
+        const btn = document.querySelector('.btn')
+        btn.addEventListener('click', function () {
+            console.log(this)
+            console.log(this === btn)
+        })
+    </script>
+</body>
+```
+
+单击按钮后，在控制台输出：
+```javascript
+<button class="btn">
+true
+```
+
+可以看出此函数中的 `this` 即是 `btn`（谁调用即是谁（粗略规则））。
+
+#### 回调函数
+将一个函数作为**参数**来传递到另一个函数时，被**作为参数**的函数即是回调函数。
+
+### 事件流
+事件完整执行过程中的流动路径。
+
+- 捕获：由父到子
+- 冒泡：由子到父
+
+#### 事件捕获
+从 DOM 的根元素开始去执行对应的事件（由外到里）
+```javascript
+DOM.addEventListener(事件类型, 触发函数, 是否使用捕获机制)
+```
+
+**是否使用捕获机制**：传入 `true` 代表捕获阶段触发，默认为 `false` （即冒泡）。
+
+#### 事件冒泡
+当一个元素的事件被触发时，同样的事件会在该元素的所有祖先元素中依次被触发。即当一个元素触发事件后，会依次向上调用所有父级元素的**同名事件**（同一事件类型）。
+
+事件冒泡是默认存在的，有的事件（[[#鼠标事件]]）没有冒泡效果，其余的可以通过方法设定。
+
+##### 阻止冒泡
+是[[#事件对象]]的一个方法，可以阻止事件流动传播，包括冒泡和捕获阶段。放置在事件触发的函数内部。
+
+```javascript
+事件对象.stopPropagation()
+```
+
+#### 解绑事件
+1. 使用 `on事件` 绑定的事件（L0 事件），直接使用 `null` 覆盖。
+```javascript
+// 绑定
+btn.onclick = function () {
+    alert('啊对对对')
+
+}
+// 解绑
+btn.onclick = null
+```
+
+2. `addEventListener` 绑定的事件（L2 事件），使用 `removeEventListener` 方法，匿名函数无法解绑。
+
+```javascript
+DOM.removeEventListener(事件类型, 触发函数[, 获取捕获或者冒泡阶段])
+```
+
+#### 事件委托
 
