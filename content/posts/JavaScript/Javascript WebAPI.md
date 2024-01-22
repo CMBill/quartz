@@ -12,7 +12,7 @@ tags:
 将 HTML 文档以树状结构直观表现出来，直观地体现了标签与标签之间的关系。
 
 ### DOM 对象
-浏览器根据 HTML 标签生成的 **JS 对象**，与所有标签对应。`document` 是最大的对象，网页的所有内容都在其中。
+浏览器根据 HTML 标签生成的 **[[JavaScript#对象（Object）|JS 对象]]**，与所有标签对应。`document` 是最大的对象，网页的所有内容都在其中。
 
 ## 获取 DOM 元素
 ### 利用 CSS 选择器
@@ -24,7 +24,7 @@ document.querySelector('css选择器')
 
 - **参数**：包含一个或多个有效的 CSS 选择器的字符串。
 - **返回值**：匹配的**第一个元素**，一个 `HTMLElement` 对象。
-- 获取后可以直接对属性做修改。
+- 获取后可以直接对[[JavaScript#属性与方法|属性]]做修改。
 
 如：
 ```html
@@ -134,7 +134,7 @@ img.title = 'title of the image'
 元素.className = 'class name'  // 修改元素对应标签的 class
 ```
 
-此操作会将原有的 `name` 替换掉
+此操作会将原有的 `class` 替换掉
 
 ##### 通过 `classList`
 通过 `classList` 属性来修改元素的类名，此属性可以返回一个元素的 `class` 属性（类名）的 [`DOMTokenList`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMTokenList) 集合
@@ -209,21 +209,71 @@ clearInterval(定时器 id)
 
 ### 事件类型
 参见：[事件参考|MDN](https://developer.mozilla.org/zh-CN/docs/Web/Events)
-#### 鼠标事件
+
+#### 常见事件
+##### 鼠标事件
 - `click`：点击
 - `mouseenter`：经过（无[[#事件冒泡|冒泡]]效果，推荐）
 - `mouseleave`：离开（无冒泡效果，推荐）
 - `mouseover`：经过（有冒泡效果）
 - `mouseout`：离开（有冒泡效果）
 
-#### 表单焦点事件
+##### 表单焦点事件
 - `focus`：（输入框光标）获得焦点
 - `blur`：（输入框光标）失去焦点
 
-#### 键盘与输入事件
+##### 键盘与输入事件
 - `keydown`：按下
 - `keyup`：抬起
 - `input`：文本框内有输入
+
+#### 进阶事件
+##### 页面加载事件
+###### `load`
+加载外部资源（图片、外联 CSS 与 JavaScript）结束时触发。
+
+如果直接将 JavaScript 代码写在 `head` 中，执行时不会获取到下方 `<body>` 内的代码，因此无法正常执行。使用如下的代码在页面内有资源加载完毕后执行回调函数，则执行可以在 `<head>` 中的 JavaScript 代码。
+```javascript
+window.addEventListener('load', function () {})
+```
+
+也可以用于监听某个特定的资源（如图片）加载完毕。
+
+###### `DOMContentLoaded`
+初始的 HTML 文档被完全加载和解析完成之后被触发，是 `document` 的事件。
+
+##### 页面滚动事件
+滚动条在滚动的时候持续触发的事件 `scroll`。
+
+```JavaScript
+window.addEventListener('scroll', function () {}) //  监听整个页面的滚动
+div.addEventListener('scroll', function () {}) //  监听 div 这个元素内的滚动
+```
+
+
+属性：
+- `scrollLeft`：向**左侧**卷去的不可见部分的大小
+- `scrollTop`：向**上方**卷去的不可见部分的大小
+
+两者均是可读写的属性，可以写入值控制页面滚动的位置，也可使用 `scrollto` 的方法
+
+```JavaScript
+window.scrollTo(x, y)
+```
+
+###### 获取整个页面滚动距离
+通过获取 `html` 标签的滚动距离来实现。
+
+```JavaScript
+window.addEventListener('scroll', function () {
+    console.log(document.documentElement.scrollTop)
+})
+```
+
+获取页面的 `html` 标签：
+```JavaScript
+document.documentElement
+```
 
 ### 相关对象与参数
 #### 事件对象
@@ -317,4 +367,47 @@ DOM.removeEventListener(事件类型, 触发函数[, 获取捕获或者冒泡阶
 ```
 
 #### 事件委托
+利用事件流的特征来解决一些开发需求的技巧，实际是利用[[#事件冒泡]]的特点，将子元素的事件委托给父元素，触发子元素后会冒泡到父元素触发事件。能减少注册次数，提高程序性能。
 
+通过事件对象的 `target` 属性可以获得真正触发事件的对象。
+
+```javascript
+<body>
+    <ul>
+        <li id="li1">1</li>
+        <li id="li2">2</li>
+    </ul>
+    <script>
+        const ul = document.querySelector('ul')
+        ul.addEventListener('click', function (e) {
+            console.log(this) //  <ul> 此处 this 指向的是注册事件的元素
+            console.log(e.target) //  <li id="li1">1</li>
+            console.log(e.target.tagName) //  LI  同样的方法可获取标签的属性
+        })
+        const li1 = document.querySelector('#li1')
+        li1.addEventListener('click', function () {
+            console.log(this) // 与上方只注册父级元素的事件一致
+        })
+    </script>
+```
+
+#### 阻止默认行为
+与[[#阻止冒泡]]类似，是事件对象的一个方法，放置于事件触发的函数内。
+```javascript
+e.preventDefault()
+```
+
+如
+```html
+<body>
+    <a href="https://files.billw.cn">点击跳转</a>
+    <script>
+        const a = document.querySelector('a')
+        a.addEventListener('click', function (e) {
+            e.preventDefault()
+        })
+    </script>
+</body>
+```
+
+由于单击后触发的函数内阻止了这一行为，所以点击后不会跳转。
