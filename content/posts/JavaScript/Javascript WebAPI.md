@@ -162,6 +162,49 @@ inputForm.type = 'password'
 Element.dataset.自定义对象名
 ```
 
+### 元素的尺寸与位置
+#### 尺寸
+元素的宽度与高度。
+
+##### `client` 家族
+- `clientWidth`：元素内部的宽度
+- `clientHeight`：元素内部的高度
+
+包括内边距（`padding`），但**不包括**边框（`border`）、外边距（`margin`）和滚动条（如果存在）。
+
+##### `offset` 家族
+- `offsetWidth`
+- `offsetHeight`
+
+**包含**元素的边框（`border`）、水平线上的内边距（`padding`）、滚动条（`scrollbar`）（如果存在）以及 CSS 设置的宽度（`width`）的值。
+
+#### 位置
+##### `offset` 家族
+- `offsetLeft`
+- `offsetTop
+获取自己相对于最近一级带有**定位**的祖先元素的左、上距离（只读）。
+
+##### 获取相对于视口的位置
+`Element.getBoundingClientRect()` 方法返回一个 [`DOMRect`](https://developer.mozilla.org/zh-CN/docs/Web/API/DOMRect) 对象，其提供了元素的大小及其相对于[视口](https://developer.mozilla.org/zh-CN/docs/Glossary/Viewport)（Viewport）的位置。
+
+```JavaScript
+element.getBoundingClientRect()
+```
+
+##### 整个页面滚动距离
+通过获取 `html` 标签的滚动距离（`scrollTop`）来实现。
+
+```JavaScript
+window.addEventListener('scroll', function () {
+    console.log(document.documentElement.scrollTop)
+})
+```
+
+获取页面的 `html` 标签：
+```JavaScript
+document.documentElement
+```
+
 ## 定时器函数
 ### 间歇函数
 ```javascript
@@ -261,18 +304,11 @@ div.addEventListener('scroll', function () {}) //  监听 div 这个元素内的
 window.scrollTo(x, y)
 ```
 
-###### 获取整个页面滚动距离
-通过获取 `html` 标签的滚动距离来实现。
+##### 页面尺寸事件
+窗口尺寸改变的时候触发的事件 `resize`。
 
 ```JavaScript
-window.addEventListener('scroll', function () {
-    console.log(document.documentElement.scrollTop)
-})
-```
-
-获取页面的 `html` 标签：
-```JavaScript
-document.documentElement
+window.addEventListener('resize', function () {})
 ```
 
 ### 相关对象与参数
@@ -410,4 +446,97 @@ e.preventDefault()
 </body>
 ```
 
-由于单击后触发的函数内阻止了这一行为，所以点击后不会跳转。
+`button` 按钮单击后默认会进行页面跳转，但由于单击后触发的函数内阻止了这一行为，所以点击后不会跳转。
+
+### 移动端事件
+#### 触屏事件 `touch`
+- `touchstart`：手指触摸到一个 DOM 元素
+- `touchmove`：在一个 DOM 元素上滑动
+- `touchend`：从一个 DOM 元素上移开
+
+
+## 节点
+DOM 树内的每一个内容都被称为节点。
+
+### 节点类型
+- **元素节点**
+    - 所有的标签都是节点，`html` 是根节点
+- 属性节点
+    - 所有的属性
+- 文本节点
+    - 所有的文本
+- 其他
+
+### 查找节点
+#### 父节点
+标签对象的 `parentNode` 属性，返回最近一级的父节点，若无则返回 `null`。
+
+#### 子节点
+- `childNodes`：获得所有子节点，包括文本节点、注释节点等。
+- `children`：仅获得所有**元素节点**（标签），返回一个伪数组。
+
+#### 兄弟节点
+- `nextElementSibling`：下一个兄弟节点
+- `previousElementSibling`：上一个兄弟节点
+
+#### 增加节点
+##### 创建节点
+```JavaScript
+document.createElement('标签名')
+```
+
+##### 追加节点
+- 作为最后一个子元素插入到某个父元素
+```JavaScript
+父元素.appendChild(要插入的元素)
+```
+
+- 插入到父元素的某个子元素前面
+```JavaScript
+父元素.insertBefore(要插入的元素, 在哪个元素前面)
+```
+
+第二个参数可以为 `undefined`。
+
+#### 克隆节点
+```JavaScript
+元素.cloneNode(布尔值)
+```
+
+若为 `true`，则表明后代节点会一同克隆（深克隆），若为 `false` 则不会，只克隆标签（不克隆文本等，浅克隆）。默认为 `false`。
+
+#### 删除节点
+```JavaScript
+父元素.removeChild(要删除的元素)
+```
+
+## BOM
+浏览器对象模型，`window` 对象是全局对象，也可以说是 JavaScript 中的顶级对象。大部分情况下 `window` 可以省略。
+
+### 延时函数
+```JavaScript
+setTimeout(回调函数, 等待的毫秒数)
+```
+
+只执行一次，相当于延迟一段时间后执行。返回一个独特的定时器的编号，可以传递给 [`clearTimeout()`](https://developer.mozilla.org/zh-CN/docs/Web/API/clearTimeout "clearTimeout()") 来取消该定时器。
+
+### `location` 对象
+拆分并保存了 URL 的各个部分的对象。
+
+#### 属性与方法
+- `href` 属性：当前页面的地址，可以用于赋值来跳转页面。
+- `search` 属性：返回地址中的参数（`?` 后的部分）。
+- `hash` 属性：返回地址中的哈希（`#` 后的部分）
+- `reload()` 方法：刷新当前页面，传入 `true` 强制刷新。
+
+### `navigator` 对象
+记录了浏览器的相关信息，如 `UA`。
+
+### `history` 对象
+
+- `back()`：后退
+- `forward()`：前进
+- `go()`：前进或后退几个页面，`1` 前进一个页面，`-1` 后退一个页面
+
+### 本地存储
+
