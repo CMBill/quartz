@@ -10,7 +10,7 @@ category:
 #### 战斧 GeForce RTX 4060 DUO 8GB
 [JD 自营](https://item.jd.com/100060502749.html)：2399
 
-!(1)[2cbca23373fdaf05.jpg.avif]
+![2cbca23373fdaf05.jpg.avif](../_Assets/2cbca23373fdaf05.jpg.avif)
 
 #### iGame GeForce RTX 4060 Ultra W DUO OC 8GB
 [JD 自营](https://item.jd.com/100055037842.html)：2449
