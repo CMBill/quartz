@@ -539,4 +539,32 @@ setTimeout(回调函数, 等待的毫秒数)
 - `go()`：前进或后退几个页面，`1` 前进一个页面，`-1` 后退一个页面
 
 ### 本地存储
+数据存储在用户浏览器中，容量较大。
 
+#### 分类
+##### `localStorage`
+永久性地存储在本地，除非手动删除，否则会一直存在。
+
+- 可以多页面（同一域）共享。
+- 只存储**字符串**，输入数字也会被转换。
+
+```javascript
+localStorage.setItem('key', 'value')  // 存储、修改
+localStorage.getItem('key')  // 获取
+localStorage.removeItem('key')  // 删除
+```
+
+#### `sessionStorage`
+关闭浏览器窗口即消失，其他方法与 `localStorage` 一致。
+
+#### 存储复杂数据
+本地存储只能储存字符串，复杂数据类型必须先转换为 JSON 字符串。
+
+```JavaScript
+// 转换为 JSON 字符串
+JSON.stringify()
+let obj = {a: 'aa', b: 'b'}
+console.log(JSON.stringify(obj))  // '{"a":"aa","b":"bb"}'
+// 转换回对象
+JSON.parse()
+```
